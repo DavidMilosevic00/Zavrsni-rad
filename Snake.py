@@ -44,6 +44,7 @@ def drawSnake():
     for cell in snake:
         x, y = cell
         pygame.draw.rect(screen, snake_color, (x * cell_size + 1, y * cell_size + 1, cell_size - 2, cell_size - 2))
+        #  početni x, početni y, width, height
 
 
 def draw():
@@ -58,8 +59,6 @@ def draw():
 
 
 def moveSnake():
-    global snakeDirection
-
     head = snake[0]
     new_head = ((head[0] + snakeDirection['x']) % numberOfCells,
                 (head[1] + snakeDirection['y']) % numberOfCells)  # Novu glavu zapišemo kao prijašnju plus direkcija
@@ -69,15 +68,23 @@ def moveSnake():
     snake.pop()  # Zadnja čelija (rep) zmije "nestane"
 
 
-# Main game loop
 while True:
 
-    # Control the frame rate
     pygame.time.Clock().tick(5)
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT:  # osposobit X gumb za zatvoriti igricu
             pygame.quit()
             sys.exit()
+        elif event.type == pygame.KEYDOWN:  # Provjeravamo ako je bilo koji gumb na tipkownici stisnut
+            if event.key == pygame.K_UP:  # Postavljamo smjer zmije ovisno o stisnutom gumbu
+                snakeDirection = gore
+            elif event.key == pygame.K_DOWN:
+                snakeDirection = dolje
+            elif event.key == pygame.K_LEFT:
+                snakeDirection = lijevo
+            elif event.key == pygame.K_RIGHT:
+                snakeDirection = desno
+
     moveSnake()
     draw()
